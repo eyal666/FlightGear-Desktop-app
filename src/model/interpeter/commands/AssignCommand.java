@@ -1,9 +1,9 @@
 package model.interpeter.commands;
 
+import model.interpeter.Interpreter;
 import model.interpeter.commands.assests.DataWriterClient;
 import model.interpeter.commands.assests.Variable;
 import model.interpeter.expression.ShuntingYardAlg;
-import model.interpeter.Interpreter;
 
 import java.util.ArrayList;
 

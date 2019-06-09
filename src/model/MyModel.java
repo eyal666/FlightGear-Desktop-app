@@ -20,8 +20,8 @@ public class MyModel extends Observable {
     public MyModel() {
         calcServer=new MySerialServer();
         aircraftControl=new Interpreter("./scripts/simulators_vars.txt");
-        Command openServer=new OpenDataServerCommand();
-        openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")),0);
+//        Command openServer=new OpenDataServerCommand();
+//        openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")),0);
     }
     public void runScript(String[] lines){
         aircraftControl.lexer(lines);

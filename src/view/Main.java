@@ -26,7 +26,7 @@ public class Main extends Application {
         vm.addObserver(ctrl);
        // Parent root = fxl.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("FlightGear Desktop App");
-        primaryStage.setScene(new Scene(root, 1244, 422));
+        primaryStage.setScene(new Scene(root, 828, 290));
         primaryStage.show();
 
 

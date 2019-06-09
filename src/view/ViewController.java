@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import viewModel.ViewModel;
 
+import javax.swing.text.html.ImageView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -172,11 +173,6 @@ public class ViewController implements Initializable, Observer {
 
     public void moveRudder() {
         vm.controlRudderVm();
-    }
-
-    public void zeroizeRudder(){
-        rudder.setValue(0);
-        moveRudder();
     }
 
     public void popuper(String name){

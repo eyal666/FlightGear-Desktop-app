@@ -1,6 +1,5 @@
 package view;
 
-import javafx.fxml.FXML;
 import javafx.scene.shape.Circle;
 
 public class Joystick {

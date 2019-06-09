@@ -1,7 +1,9 @@
 package model.server_side;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 public class BestFirstSearch<Solution> extends CommonSearcher {
 

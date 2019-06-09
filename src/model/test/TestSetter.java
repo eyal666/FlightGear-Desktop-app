@@ -1,6 +1,8 @@
 package model.test;
 
-import model.server_side.*;
+import model.server_side.MyClientHandler;
+import model.server_side.MySerialServer;
+import model.server_side.Server;
 
 public class TestSetter {
 	

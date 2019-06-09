@@ -1,7 +1,7 @@
 package model.interpeter.commands;
 
-import model.interpeter.commands.assests.Variable;
 import model.interpeter.Interpreter;
+import model.interpeter.commands.assests.Variable;
 
 import java.util.ArrayList;
 

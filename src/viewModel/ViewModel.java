@@ -4,11 +4,7 @@ package viewModel;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import model.MyModel;
-import model.test.MyInterpreter;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -27,23 +23,12 @@ public class ViewModel extends Observable implements Observer {
 
     public void runScriptVm(String script){
         m.runScript(script.split("\n"));
-//        try {
-//            BufferedReader inFromScript=new BufferedReader(new FileReader(script));
-//            String line;
-//            List<String> lines=new ArrayList<>();
-//            while((line=inFromScript.readLine())!=null){
-//                lines.add(line);
-//            }
-//            inFromScript.close();
-//            m.runScript(lines.toArray(new String[0]));
-//        } catch (FileNotFoundException e) {} catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
     public void controlElevatorAileronVm(){
-        double elevatorVal=Double.min(0-(joyStickY.doubleValue()/100), 1);
-        double aileronVal=Double.min(joyStickX.doubleValue()/100, 1);
-        System.out.println(elevatorVal+" , "+aileronVal);
+        double elevatorVal;
+        double aileronVal;
+        elevatorVal=Double.min(0-(joyStickY.doubleValue()/60), 1);
+        aileronVal=Double.min(joyStickX.doubleValue()/60, 1);
         m.controlElevatorAileron(elevatorVal, aileronVal);
     }
     public void controlRudderVm(){
