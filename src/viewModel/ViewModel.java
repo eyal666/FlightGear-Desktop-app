@@ -3,6 +3,7 @@ package viewModel;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.StringProperty;
 import model.MyModel;
 
 import java.util.Observable;
@@ -12,6 +13,7 @@ public class ViewModel extends Observable implements Observer {
 
     MyModel m;
     public DoubleProperty joyStickX, joyStickY, throttle, rudder; //value of the joyStick position
+    public StringProperty path;
 
     public ViewModel(MyModel m) {
         this.m = m;
@@ -40,8 +42,14 @@ public class ViewModel extends Observable implements Observer {
     public void connectToSimVM(String ip, String port){
         m.connectToSim(ip, port);
     }
+    public void getPathFromCalcServerVm(){
+        path.setValue(m.getPath());
+
+    }
     @Override
     public void update(Observable o, Object arg) {
-
+        if(o.equals(m)){
+            getPathFromCalcServerVm();
+        }
     }
 }

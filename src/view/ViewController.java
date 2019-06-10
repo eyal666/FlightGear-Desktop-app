@@ -23,6 +23,7 @@ import java.util.Scanner;
 public class ViewController implements Initializable, Observer {
 
     ViewModel vm;
+    ColorfullMapDisplayer map; //todo: add notation to map and implement solution display
     @FXML
     Circle joyStick;
     @FXML
