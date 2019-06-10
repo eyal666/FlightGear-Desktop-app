@@ -37,8 +37,8 @@ public class MyModel extends Observable {
         this.calcServerPort=calcServerPort;
         calcServer=new MySerialServer();
         aircraftControl=new Interpreter("./scripts/simulators_vars.txt");
-        Command openServer=new OpenDataServerCommand();
-        openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")),0);
+//        Command openServer=new OpenDataServerCommand();
+//        openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")),0);
         calcServer.start(calcServerPort, new MyClientHandler());
     }
     public void runScript(String[] lines){
@@ -95,6 +95,6 @@ public class MyModel extends Observable {
             path=inFromCalcServer.readLine();
         } catch (IOException e) {}
         System.out.println("\tsolution received");
-        notifyObservers();
+        //notifyObservers();
     }
 }

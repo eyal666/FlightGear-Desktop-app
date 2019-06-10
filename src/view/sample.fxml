@@ -29,7 +29,7 @@
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Button>
-      <Button fx:id="calcPath" layoutX="200.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="133.0" text="Calculate path">
+      <Button fx:id="calcPath" layoutX="200.0" mnemonicParsing="false" onAction="#calcPath" prefHeight="37.0" prefWidth="133.0" text="Calculate path">
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Button>

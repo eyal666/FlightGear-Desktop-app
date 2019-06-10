@@ -4,6 +4,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
@@ -11,6 +15,7 @@ import javafx.stage.Stage;
 import viewModel.ViewModel;
 
 import javax.swing.text.html.ImageView;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,7 +28,9 @@ import java.util.Scanner;
 public class ViewController implements Initializable, Observer {
 
     ViewModel vm;
-    ColorfullMapDisplayer map; //todo: add notation to map and implement solution display
+    ColorfullMapDisplayer mapDisplayer; //todo: add notation to map and implement solution display
+    @FXML
+    Canvas map;
     @FXML
     Circle joyStick;
     @FXML
@@ -61,6 +68,7 @@ public class ViewController implements Initializable, Observer {
         autoPilot.setToggleGroup(tg);
         manual.fire();
         this.myJoyStick=new Joystick(this);
+        this.mapDisplayer=new ColorfullMapDisplayer(this);
     }
 
     public void setViewModel(ViewModel vm) {
@@ -99,6 +107,26 @@ public class ViewController implements Initializable, Observer {
     }
 
     public void calcPath() {
+        System.out.println("connected");
+        Stage popup = new Stage();
+        VBox box = new VBox(20);
+        Label ipLabel = new Label("IP:");
+        Label portLabel = new Label("PORT:");
+        TextField ipUserInput = new TextField();
+        TextField portUserInput = new TextField();
+        Button submit = new Button("Submit");
+        box.getChildren().addAll(ipLabel, ipUserInput, portLabel, portUserInput, submit);
+        popup.setScene(new Scene(box, 350, 250));
+        popup.setTitle("Connect to path calc server");
+        popup.show();
+        submit.setOnAction(e ->
+        {
+            String ip = ipUserInput.getText(); // saving ip and port data!
+            String port = portUserInput.getText();
+            vm.connectToCalcServerVm(ip, port);
+            popup.close();
+            showPathOnMap();
+        });
 
     }
 
@@ -157,18 +185,6 @@ public class ViewController implements Initializable, Observer {
 
     public void moveElevatorAileron(){
         myJoyStick.moveJoyStick();
-//        joyStick.setOnMouseDragged(e -> {
-//            if (Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2)) <= frame.getRadius()) {
-//                joyStick.setCenterX(e.getX());
-//                joyStick.setCenterY(e.getY());
-//                vm.controlElevatorAileronVm();
-//            }
-//        });
-//        joyStick.setOnMouseReleased(e -> {
-//            joyStick.setCenterX(0);
-//            joyStick.setCenterY(0);
-//            vm.controlElevatorAileronVm();
-//        });
     }
 
     public void valFromJoystick(){
@@ -197,6 +213,10 @@ public class ViewController implements Initializable, Observer {
             if(name.contains("connect")) connectToFlightgear();
             popup.close();
         });
+    }
+
+    public void showPathOnMap(){
+        mapDisplayer.convertPathToLine();
     }
     @Override
     public void update(Observable o, Object arg) {}

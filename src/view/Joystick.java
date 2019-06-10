@@ -1,26 +1,26 @@
 package view;
 
-import javafx.scene.shape.Circle;
-
 public class Joystick {
     ViewController vc;
-   // Circle frame;
-   // Circle joyStick;
     double radLimit;
 
 
     public Joystick(ViewController vc) {
-//        this.frame = frame;
-//        this.joyStick = joyStick;
         this.vc=vc;
-        radLimit = vc.frame.getRadius() + vc.joyStick.getRadius();
+        radLimit = vc.frame.getRadius();
     }
 
     public void moveJoyStick() {
         vc.joyStick.setOnMouseDragged(e -> {
-            if (Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2)) <= radLimit) {
+            double vectorLength=Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2));//calc the (x,y) lenght from center of frame
+            if (vectorLength <= radLimit) {
                 vc.joyStick.setCenterX(e.getX());
                 vc.joyStick.setCenterY(e.getY());
+                vc.valFromJoystick();
+            }
+            else {
+                vc.joyStick.setCenterX(e.getX() * radLimit / vectorLength);
+                vc.joyStick.setCenterY(e.getY() * radLimit / vectorLength);
                 vc.valFromJoystick();
             }
         });
