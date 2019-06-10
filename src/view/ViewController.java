@@ -47,6 +47,7 @@ public class ViewController implements Initializable, Observer {
     RadioButton autoPilot;
     @FXML
     RadioButton manual;
+    Joystick myJoyStick;
     boolean isScriptLoaded=false;
     boolean isConnected=false;
 
@@ -58,6 +59,7 @@ public class ViewController implements Initializable, Observer {
         manual.setToggleGroup(tg);
         autoPilot.setToggleGroup(tg);
         manual.fire();
+        this.myJoyStick=new Joystick(this);
     }
 
     public void setViewModel(ViewModel vm) {
@@ -153,18 +155,23 @@ public class ViewController implements Initializable, Observer {
     }
 
     public void moveElevatorAileron(){
-        joyStick.setOnMouseDragged(e -> {
-            if (Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2)) <= joyStick.getRadius()+frame.getRadius()) {
-                joyStick.setCenterX(e.getX());
-                joyStick.setCenterY(e.getY());
-                vm.controlElevatorAileronVm();
-            }
-        });
-        joyStick.setOnMouseReleased(e -> {
-            joyStick.setCenterX(0);
-            joyStick.setCenterY(0);
-            vm.controlElevatorAileronVm();
-        });
+        myJoyStick.moveJoyStick();
+//        joyStick.setOnMouseDragged(e -> {
+//            if (Math.sqrt(Math.pow(e.getX(), 2) + Math.pow(e.getY(), 2)) <= frame.getRadius()) {
+//                joyStick.setCenterX(e.getX());
+//                joyStick.setCenterY(e.getY());
+//                vm.controlElevatorAileronVm();
+//            }
+//        });
+//        joyStick.setOnMouseReleased(e -> {
+//            joyStick.setCenterX(0);
+//            joyStick.setCenterY(0);
+//            vm.controlElevatorAileronVm();
+//        });
+    }
+
+    public void valFromJoystick(){
+        vm.controlElevatorAileronVm();
     }
 
     public void moveThrottle() {
