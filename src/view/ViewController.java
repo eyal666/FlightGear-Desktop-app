@@ -28,7 +28,7 @@ import java.util.Scanner;
 public class ViewController implements Initializable, Observer {
 
     ViewModel vm;
-    ColorfullMapDisplayer mapDisplayer; //todo: add notation to map and implement solution display
+    MapDisplayer mapDisplayer; //todo: add notation to map and implement solution display
     @FXML
     Canvas map;
     @FXML
@@ -68,9 +68,8 @@ public class ViewController implements Initializable, Observer {
         autoPilot.setToggleGroup(tg);
         manual.fire();
         this.myJoyStick=new Joystick(this);
-        this.mapDisplayer=new ColorfullMapDisplayer(this);
+        this.mapDisplayer=new MapDisplayer(this);
     }
-
     public void setViewModel(ViewModel vm) {
         this.vm = vm;
         vm.joyStickX.bind(joyStick.centerXProperty());
@@ -101,11 +100,6 @@ public class ViewController implements Initializable, Observer {
         });
         isConnected=true;
     }
-
-    public void loadData() {
-
-    }
-
     public void calcPath() {
         System.out.println("connected");
         Stage popup = new Stage();
@@ -129,7 +123,21 @@ public class ViewController implements Initializable, Observer {
         });
 
     }
+    public void loadData() {
 
+    } //use to load CSV file
+
+    //**********************************autopilot func's****************************************//
+
+    public void autoPilotMode() {
+        System.out.println("autopilot mode is on");
+        manual.disarm();
+        rudder.setDisable(true);
+        throttle.setDisable(true);
+        joyStick.setDisable(true);
+        loadScript.setDisable(false);
+        runScript.setDisable(false);
+    }
     public void runScript(){
         if(isConnected&&isScriptLoaded){
            vm.runScriptVm(scriptAsText.getText());
@@ -143,7 +151,21 @@ public class ViewController implements Initializable, Observer {
             }
         }
     }
-
+    public void popuper(String name){
+        Stage popup = new Stage();
+        VBox box = new VBox(10);
+        Label msg = new Label(name);
+        Button ok = new Button("ok");
+        box.getChildren().addAll(msg, ok);
+        popup.setScene(new Scene(box, 250, 100));
+        popup.setTitle("Massage");
+        popup.show();
+        ok.setOnAction(e->{
+            if(name.contains("script")) loadScript();
+            if(name.contains("connect")) connectToFlightgear();
+            popup.close();
+        });
+    } //manage the functionality of run script button in case of no script or no server connection
     public void loadScript() {
 
         FileChooser fc=new FileChooser();
@@ -162,17 +184,9 @@ public class ViewController implements Initializable, Observer {
         } catch (FileNotFoundException e) {}
         isScriptLoaded=true;
     }
-    //autopilot func's
-    public void autoPilotMode() {
-        System.out.println("autopilot mode is on");
-        manual.disarm();
-        rudder.setDisable(true);
-        throttle.setDisable(true);
-        joyStick.setDisable(true);
-        loadScript.setDisable(false);
-        runScript.setDisable(false);
-    }
-    //manual func's
+
+    //**********************************manual func's******************************************//
+
     public void manualMode() {
         autoPilot.disarm();
         rudder.setDisable(false);
@@ -182,42 +196,26 @@ public class ViewController implements Initializable, Observer {
         runScript.setDisable(true);
         System.out.println("manual mode is on");
     }
-
     public void moveElevatorAileron(){
         myJoyStick.moveJoyStick();
-    }
-
+    }  //limit joystick movment to the frame circle
     public void valFromJoystick(){
         vm.controlElevatorAileronVm();
-    }
-
+    } //  envoked from joystick class to invoke vm joystick func after limit joystick movment
     public void moveThrottle() {
         vm.controlThrottleVm();
     }
-
     public void moveRudder() {
         vm.controlRudderVm();
     }
 
-    public void popuper(String name){
-        Stage popup = new Stage();
-        VBox box = new VBox(10);
-        Label msg = new Label(name);
-        Button ok = new Button("ok");
-        box.getChildren().addAll(msg, ok);
-        popup.setScene(new Scene(box, 250, 100));
-        popup.setTitle("Massage");
-        popup.show();
-        ok.setOnAction(e->{
-            if(name.contains("script")) loadScript();
-            if(name.contains("connect")) connectToFlightgear();
-            popup.close();
-        });
-    }
+    //***********************************MAP DISPLAY************************************************//
 
     public void showPathOnMap(){
         mapDisplayer.convertPathToLine();
-    }
+    }//use to envoke masDisplayer method that draw the solution on the map
+
+    //**********************************************************************************************//
     @Override
     public void update(Observable o, Object arg) {}
 }

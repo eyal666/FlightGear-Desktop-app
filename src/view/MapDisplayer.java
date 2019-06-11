@@ -1,11 +1,11 @@
 package view;
 
-public class ColorfullMapDisplayer {
+public class MapDisplayer {
 
     String path;
     ViewController vc;
 
-    public ColorfullMapDisplayer(ViewController vc) {
+    public MapDisplayer(ViewController vc) {
         this.vc = vc;
     }
 

@@ -46,26 +46,6 @@
          </font>
       </RadioButton>
       <Circle fx:id="frame" fill="#f2f3f5" layoutX="706.0" layoutY="138.0" radius="70.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="joyStick" fill="#b4b6b9" layoutX="706.0" layoutY="138.0" onMouseDragged="#moveElevatorAileron" radius="32.0" strokeType="INSIDE">
-         <stroke>
-            <RadialGradient centerX="0.4943181818181818" centerY="0.5" radius="0.5">
-               <stops>
-                  <Stop color="BLACK" />
-                  <Stop color="WHITE" offset="1.0" />
-               </stops>
-            </RadialGradient>
-         </stroke>
-         <effect>
-            <Lighting diffuseConstant="1.32" specularConstant="1.13" specularExponent="30.73" surfaceScale="4.43">
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant color="#fcfcfc" />
-               </light>
-            </Lighting>
-         </effect>
-      </Circle>
       <Slider fx:id="rudder" layoutX="621.0" layoutY="218.0" max="1.0" min="-1.0" nodeOrientation="RIGHT_TO_LEFT" onMouseDragEntered="#moveRudder" onMouseDragExited="#moveRudder" onMouseDragOver="#moveRudder" onMouseDragReleased="#moveRudder" onMouseDragged="#moveRudder" prefHeight="17.0" prefWidth="170.0" rotate="180.0">
          <opaqueInsets>
             <Insets />
@@ -74,7 +54,7 @@
             <Cursor fx:constant="DEFAULT" />
          </cursor>
       </Slider>
-      <Slider fx:id="throttle" layoutX="610.0" layoutY="47.0" max="1.0" onMouseReleased="#moveThrottle" orientation="VERTICAL" prefHeight="170.0" prefWidth="17.0">
+      <Slider fx:id="throttle" layoutX="610.0" layoutY="47.0" max="1.0" onMouseDragged="#moveThrottle" orientation="VERTICAL" prefHeight="170.0" prefWidth="17.0">
          <cursor>
             <Cursor fx:constant="DEFAULT" />
          </cursor>
@@ -94,7 +74,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Text layoutX="565.0" layoutY="151.0" rotate="-90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="throttle" textAlignment="CENTER" wrappingWidth="81.234375">
+      <Text layoutX="558.0" layoutY="146.0" rotate="-90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="throttle" textAlignment="CENTER" wrappingWidth="81.234375">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
@@ -129,5 +109,25 @@
             <Image url="@../../images/sm_5aa0fdd386c8a.png" />
          </image>
       </ImageView>
+      <Circle fx:id="joyStick" fill="#b4b6b9" layoutX="706.0" layoutY="138.0" onMouseDragged="#moveElevatorAileron" radius="32.0" strokeType="INSIDE">
+         <stroke>
+            <RadialGradient centerX="0.4943181818181818" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="WHITE" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </stroke>
+         <effect>
+            <Lighting diffuseConstant="1.32" specularConstant="1.13" specularExponent="30.73" surfaceScale="4.43">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#fcfcfc" />
+               </light>
+            </Lighting>
+         </effect>
+      </Circle>
    </children>
 </Pane>

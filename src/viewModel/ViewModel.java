@@ -57,13 +57,13 @@ public class ViewModel extends Observable implements Observer {
             for(int j=0;j<matrix[i].length;j++)
                 matrix[i][j]=String.valueOf(100+r.nextInt(101));
         m.connectToCalcServer(ip, port,matrix,"0,0", "3,3");
-        getPathFromCalcServerVm();
+       // getPathFromCalcServerVm();
     }
 
     @Override
     public void update(Observable o, Object arg) {
-//        if(o.equals(m)){
-//            getPathFromCalcServerVm();
-//        }
+        if(o.equals(m)){
+            getPathFromCalcServerVm();
+        }
     }
 }

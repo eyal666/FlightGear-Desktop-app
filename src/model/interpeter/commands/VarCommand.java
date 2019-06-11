@@ -9,7 +9,7 @@ public class VarCommand extends CommonCommand {
 
     @Override
     public int execute(ArrayList<String> args, int index) {
-        Interpreter.symbolTable.put(args.get(index+1), new Variable(0.0,args.get(index+1)));
+        Interpreter.symbolTable.put(args.get(index+1), new Variable(0.0,null));
         return 1;
     }
 }

@@ -17,7 +17,7 @@ public class AssignCommand extends CommonCommand {
             return 0;
         }
         Variable tempVar=Interpreter.symbolTable.get(args.get(index-1));
-        if(tempVar.varName.contains("/")) {
+        if(tempVar.varName!=null) { //.contains("/")
             DataWriterClient.out.println("set " + tempVar.varName + " " + ShuntingYardAlg.calc(args.get(index + 1)));
             DataWriterClient.out.flush();
             return 1;
