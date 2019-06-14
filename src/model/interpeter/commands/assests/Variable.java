@@ -1,7 +1,12 @@
 package model.interpeter.commands.assests;
 
 
-public class Variable {
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+
+import java.util.Observable;
+
+public class Variable extends Observable {
 
     public double value;
     public String varName;
@@ -17,6 +22,5 @@ public class Variable {
 
     public void setValue(double value) {
         this.value = value;
-
     }
 }

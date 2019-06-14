@@ -3,6 +3,7 @@ package view;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,7 +15,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import viewModel.ViewModel;
 
-import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,9 +28,10 @@ import java.util.Scanner;
 public class ViewController implements Initializable, Observer {
 
     ViewModel vm;
-    MapDisplayer mapDisplayer; //todo: add notation to map and implement solution display
     @FXML
-    Canvas map;
+    Map map;
+    @FXML
+    Aircraft aircraft;
     @FXML
     Circle joyStick;
     @FXML
@@ -58,6 +59,7 @@ public class ViewController implements Initializable, Observer {
     Joystick myJoyStick;
     boolean isScriptLoaded=false;
     boolean isConnected=false;
+    boolean isConnectedToCalcServer=false;
 
 
     @Override
@@ -68,7 +70,6 @@ public class ViewController implements Initializable, Observer {
         autoPilot.setToggleGroup(tg);
         manual.fire();
         this.myJoyStick=new Joystick(this);
-        this.mapDisplayer=new MapDisplayer(this);
     }
     public void setViewModel(ViewModel vm) {
         this.vm = vm;
@@ -76,6 +77,8 @@ public class ViewController implements Initializable, Observer {
         vm.joyStickY.bind(joyStick.centerYProperty());
         vm.throttle.bind(throttle.valueProperty());
         vm.rudder.bind(rudder.valueProperty());
+        vm.aircraftLat.bindBidirectional(this.aircraft.latitude);
+        vm.aircraftLong.bindBidirectional(this.aircraft.longitude);
     }
     //buttons func's
     public void connectToFlightgear() {
@@ -101,30 +104,50 @@ public class ViewController implements Initializable, Observer {
         isConnected=true;
     }
     public void calcPath() {
-        System.out.println("connected");
-        Stage popup = new Stage();
-        VBox box = new VBox(20);
-        Label ipLabel = new Label("IP:");
-        Label portLabel = new Label("PORT:");
-        TextField ipUserInput = new TextField();
-        TextField portUserInput = new TextField();
-        Button submit = new Button("Submit");
-        box.getChildren().addAll(ipLabel, ipUserInput, portLabel, portUserInput, submit);
-        popup.setScene(new Scene(box, 350, 250));
-        popup.setTitle("Connect to path calc server");
-        popup.show();
-        submit.setOnAction(e ->
-        {
-            String ip = ipUserInput.getText(); // saving ip and port data!
-            String port = portUserInput.getText();
-            vm.connectToCalcServerVm(ip, port);
-            popup.close();
+        if(!isConnectedToCalcServer) {
+            System.out.println("connected");
+            Stage popup = new Stage();
+            VBox box = new VBox(20);
+            Label ipLabel = new Label("IP:");
+            Label portLabel = new Label("PORT:");
+            TextField ipUserInput = new TextField();
+            TextField portUserInput = new TextField();
+            Button submit = new Button("Submit");
+            box.getChildren().addAll(ipLabel, ipUserInput, portLabel, portUserInput, submit);
+            popup.setScene(new Scene(box, 350, 250));
+            popup.setTitle("Connect to path calc server");
+            popup.show();
+            submit.setOnAction(e ->
+            {
+                String ip = ipUserInput.getText(); // saving ip and port data!
+                String port = portUserInput.getText();
+                vm.connectToCalcServerVm(ip, port, ((Map) map).matrix, new Point(3, 3), new Point(0, 0));
+                popup.close();
+                showPathOnMap();
+                isConnectedToCalcServer = true;
+            });
+        }
+        else{
+            vm.getPathFromCalcServerVm(new Point(0, 0), new Point(3, 3));
             showPathOnMap();
-        });
-
+        }
     }
     public void loadData() {
-
+        FileChooser fc=new FileChooser();
+        fc.setTitle("Choose CSV file");
+        fc.setInitialDirectory(new File("./csv files"));
+        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("csv", "*.csv"));
+        File chosen= fc.showOpenDialog(null);
+        if(chosen!=null){
+            System.out.println(chosen.getName());
+        }
+        try {
+            Scanner s=new Scanner(new FileReader(chosen)).useDelimiter("\n");
+            this.map.setMapDisplayer(this , s);
+            this.aircraft.setAircraft(this);
+            this.map.mapDrawer();
+            vm.positionUpdateVM();
+        } catch (FileNotFoundException e) {}
     } //use to load CSV file
 
     //**********************************autopilot func's****************************************//
@@ -167,7 +190,6 @@ public class ViewController implements Initializable, Observer {
         });
     } //manage the functionality of run script button in case of no script or no server connection
     public void loadScript() {
-
         FileChooser fc=new FileChooser();
         fc.setTitle("Choose script");
         fc.setInitialDirectory(new File("./scripts"));
@@ -198,10 +220,10 @@ public class ViewController implements Initializable, Observer {
     }
     public void moveElevatorAileron(){
         myJoyStick.moveJoyStick();
-    }  //limit joystick movment to the frame circle
+    }  //limit joystick movement to the frame circle
     public void valFromJoystick(){
         vm.controlElevatorAileronVm();
-    } //  envoked from joystick class to invoke vm joystick func after limit joystick movment
+    } //  invoked from joystick class to invoke vm joystick func after limit joystick movment
     public void moveThrottle() {
         vm.controlThrottleVm();
     }
@@ -212,11 +234,12 @@ public class ViewController implements Initializable, Observer {
     //***********************************MAP DISPLAY************************************************//
 
     public void showPathOnMap(){
-        mapDisplayer.convertPathToLine();
-    }//use to envoke masDisplayer method that draw the solution on the map
-
+        this.map.convertPathToLine();
+    }//use to invoke mapDisplayer method that draw the solution on the map
     //**********************************************************************************************//
     @Override
-    public void update(Observable o, Object arg) {}
+    public void update(Observable o, Object arg) {
+        this.aircraft.position();
+    }
 }
 

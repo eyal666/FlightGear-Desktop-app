@@ -6,8 +6,9 @@ import model.interpeter.commands.assests.Variable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Observable;
 
-public class Interpreter {
+public class Interpreter extends Observable {
 
     public static HashMap<String,ExpressionCommand> commandMap;
     public static HashMap<String, Variable> symbolTable;
@@ -32,6 +33,10 @@ public class Interpreter {
         commandMap.put("return", new ExpressionCommand(new ReturnCommand()));
         commandMap.put("print", new ExpressionCommand(new PrintCommand()));
         commandMap.put("sleep", new ExpressionCommand(new SleepCommand()));
+    }
+
+    public static HashMap<String, Variable> getSymbolTable() {
+        return symbolTable;
     }
 
     public int parser(){

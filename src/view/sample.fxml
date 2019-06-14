@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.canvas.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.effect.*?>
@@ -18,14 +10,15 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
-
+<?import view.Map?>
+<?import view.Aircraft?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="290.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ViewController">
    <children>
       <Button fx:id="connect" mnemonicParsing="false" onAction="#connectToFlightgear" prefHeight="35.0" prefWidth="97.0" text="Connect">
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Button>
-      <Button fx:id="loadData" layoutX="100.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="97.0" text="Load data">
+      <Button fx:id="loadData" layoutX="100.0" mnemonicParsing="false" onAction="#loadData" prefHeight="37.0" prefWidth="97.0" text="Load data">
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Button>
@@ -33,7 +26,6 @@
          <font>
             <Font name="System Bold" size="16.0" />
          </font></Button>
-      <Canvas height="220.0" layoutY="38.0" width="334.0" />
       <TextArea fx:id="scriptAsText" layoutX="345.0" layoutY="41.0" prefHeight="220.0" prefWidth="243.0" />
       <RadioButton fx:id="autoPilot" layoutX="345.0" layoutY="1.0" mnemonicParsing="false" onAction="#autoPilotMode" prefHeight="35.0" prefWidth="160.0" text="Autopilot">
          <font>
@@ -129,5 +121,7 @@
             </Lighting>
          </effect>
       </Circle>
+     <Map fx:id="map" height="202.0" layoutX="20.0" layoutY="50.0" width="304.0" />
+      <Aircraft fx:id="aircraft" height="202.0" layoutX="20.0" layoutY="50.0" width="304.0" />
    </children>
 </Pane>

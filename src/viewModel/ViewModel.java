@@ -1,12 +1,11 @@
 package viewModel;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import model.MyModel;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
@@ -25,7 +24,6 @@ public class ViewModel extends Observable implements Observer {
         rudder=new SimpleDoubleProperty();
         path=new SimpleStringProperty();
     }
-
     public void runScriptVm(String script){
         m.runScript(script.split("\n"));
     }
@@ -46,24 +44,23 @@ public class ViewModel extends Observable implements Observer {
     public void connectToSimVM(String ip, String port){
         m.connectToSim(ip, port);
     }
-    public void getPathFromCalcServerVm(){
-        path.setValue(m.getPath());
-
-    }
-    public void connectToCalcServerVm(String ip, String port){
-        Random r=new Random() ;
-        String[][] matrix=new String[4][4];
+    public void connectToCalcServerVm(String ip, String port, double [][] matrix, Point init, Point goal){
+        String[][] matrixAsString=new String[matrix.length][matrix[0].length];
+        String initPointAsString=init.x+","+init.x;
+        String goalPointAsString=goal.x+","+goal.y;
         for(int i=0;i<matrix.length;i++)
             for(int j=0;j<matrix[i].length;j++)
-                matrix[i][j]=String.valueOf(100+r.nextInt(101));
-        m.connectToCalcServer(ip, port,matrix,"0,0", "3,3");
-       // getPathFromCalcServerVm();
+                matrixAsString[i][j]=String.valueOf(matrix[i][j]);
+        m.connectToCalcServer(ip, port,matrixAsString,initPointAsString, goalPointAsString);
     }
-
+    public void getPathFromCalcServerVm( Point init, Point goal){
+        String initPointAsString=init.x+","+init.y;
+        String goalPointAsString=goal.x+","+goal.y;
+        m.getPathFromCalcServer(initPointAsString,goalPointAsString);
+    }
     @Override
     public void update(Observable o, Object arg) {
-        if(o.equals(m)){
-            getPathFromCalcServerVm();
-        }
+        path.setValue(m.getPath());
+        notifyObservers();
     }
 }

@@ -63,4 +63,9 @@ public class SearchableMatrix implements Searchable<Point> {
        return directions.substring(0, directions.length()-1);
 
     }
+    @Override
+    public String toString(){
+        return matrix.matrix.length+" , "+matrix.getInitialState().getState().x+matrix.getInitialState().getState().y
+                +matrix.getGoalState().getState().x+matrix.getGoalState().getState().y;
+    }
 }

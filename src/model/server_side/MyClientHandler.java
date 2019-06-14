@@ -2,6 +2,8 @@ package model.server_side;
 
 import java.awt.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MyClientHandler implements ClientHandler {
 
@@ -24,24 +26,23 @@ public class MyClientHandler implements ClientHandler {
 			String solution;
 			String line;
 			String [] stringMatrix;
-			int j=0;
 			int rows=0, columns=0;
-
+			ArrayList<String []> arr=new ArrayList<>();
 			line=inputFromClient.readLine();
 			stringMatrix=line.split(",");
-			columns=stringMatrix.length;
-			rows=columns;
-			double [][] matrix=new double[rows][columns];
-
 			while(!line.equals("end")) {
-				for(int i=0; i<columns; i++){
-					matrix[j][i]=Double.parseDouble(stringMatrix[i]);
-				}
-				j++;
-				line=inputFromClient.readLine();
-				stringMatrix=line.split(",");
+				arr.add(stringMatrix);
+				line = inputFromClient.readLine();
+				stringMatrix = line.split(",");
 			}
-
+			rows=arr.size();
+			columns=arr.get(0).length;
+			double [][] matrix=new double[rows][columns];
+			for(int i=0; i<rows; i++){
+				for (int j=0; j<columns; j++){
+					matrix[i][j]=Double.parseDouble(arr.get(i)[j]);
+				}
+			}
 			String[] recInitial=inputFromClient.readLine().split(",");
 			Point initialPoint=new Point(Integer.parseInt(recInitial[0]),Integer.parseInt(recInitial[1]));
 			String[] recGoal=inputFromClient.readLine().split(",");
