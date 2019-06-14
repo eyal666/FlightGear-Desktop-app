@@ -13,8 +13,7 @@ import java.util.Random;
 public class ViewModel extends Observable implements Observer {
 
     MyModel m;
-    public DoubleProperty joyStickX, joyStickY, throttle, rudder; //value of the joyStick position
-    public StringProperty path;
+    public DoubleProperty joyStickX, joyStickY, throttle, rudder, longitude, latitude, heading; //value of the joyStick position
 
     public ViewModel(MyModel m) {
         this.m = m;
@@ -22,7 +21,9 @@ public class ViewModel extends Observable implements Observer {
         joyStickX=new SimpleDoubleProperty();
         throttle=new SimpleDoubleProperty();
         rudder=new SimpleDoubleProperty();
-        path=new SimpleStringProperty();
+        latitude=new SimpleDoubleProperty();
+        longitude=new SimpleDoubleProperty();
+        heading=new SimpleDoubleProperty();
     }
     public void runScriptVm(String script){
         m.runScript(script.split("\n"));
@@ -44,23 +45,26 @@ public class ViewModel extends Observable implements Observer {
     public void connectToSimVM(String ip, String port){
         m.connectToSim(ip, port);
     }
-    public void connectToCalcServerVm(String ip, String port, double [][] matrix, Point init, Point goal){
+    public String connectToCalcServerVm(String ip, String port, double [][] matrix, Point init, Point goal){
         String[][] matrixAsString=new String[matrix.length][matrix[0].length];
         String initPointAsString=init.x+","+init.x;
         String goalPointAsString=goal.x+","+goal.y;
         for(int i=0;i<matrix.length;i++)
             for(int j=0;j<matrix[i].length;j++)
                 matrixAsString[i][j]=String.valueOf(matrix[i][j]);
-        m.connectToCalcServer(ip, port,matrixAsString,initPointAsString, goalPointAsString);
+       return m.connectToCalcServer(ip, port,matrixAsString,initPointAsString, goalPointAsString);
     }
-    public void getPathFromCalcServerVm( Point init, Point goal){
-        String initPointAsString=init.x+","+init.y;
-        String goalPointAsString=goal.x+","+goal.y;
-        m.getPathFromCalcServer(initPointAsString,goalPointAsString);
+    public String getPathFromCalcServerVm( Point init, Point goal) {
+        String initPointAsString = init.x + "," + init.y;
+        String goalPointAsString = goal.x + "," + goal.y;
+        return m.getPathFromCalcServer(initPointAsString, goalPointAsString);
     }
     @Override
     public void update(Observable o, Object arg) {
-        path.setValue(m.getPath());
-        notifyObservers();
+        latitude.setValue(Double.parseDouble(((String[])arg)[0]));
+        longitude.setValue(Double.parseDouble(((String[])arg)[1]));
+        heading.setValue(Double.parseDouble(((String[])arg)[2]));
+        this.setChanged();
+        this.notifyObservers();
     }
 }

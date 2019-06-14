@@ -10,8 +10,9 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
-<?import view.Map?>
 <?import view.Aircraft?>
+<?import view.Map?>
+<?import view.Path?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="290.0" prefWidth="828.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ViewController">
    <children>
       <Button fx:id="connect" mnemonicParsing="false" onAction="#connectToFlightgear" prefHeight="35.0" prefWidth="97.0" text="Connect">
@@ -123,5 +124,6 @@
       </Circle>
      <Map fx:id="map" height="202.0" layoutX="20.0" layoutY="50.0" width="304.0" />
       <Aircraft fx:id="aircraft" height="202.0" layoutX="20.0" layoutY="50.0" width="304.0" />
+      <Path fx:id="path" height="202.0" layoutX="20.0" layoutY="50.0" onMouseClicked="#setDest"  width="304.0" />
    </children>
 </Pane>

@@ -33,6 +33,8 @@ public class ViewController implements Initializable, Observer {
     @FXML
     Aircraft aircraft;
     @FXML
+    Path path;
+    @FXML
     Circle joyStick;
     @FXML
     Circle frame;
@@ -70,6 +72,9 @@ public class ViewController implements Initializable, Observer {
         autoPilot.setToggleGroup(tg);
         manual.fire();
         this.myJoyStick=new Joystick(this);
+        this.map.setVc(this);
+        this.aircraft.setVc(this);
+        this.path.setVc(this);
     }
     public void setViewModel(ViewModel vm) {
         this.vm = vm;
@@ -77,8 +82,9 @@ public class ViewController implements Initializable, Observer {
         vm.joyStickY.bind(joyStick.centerYProperty());
         vm.throttle.bind(throttle.valueProperty());
         vm.rudder.bind(rudder.valueProperty());
-        vm.aircraftLat.bindBidirectional(this.aircraft.latitude);
-        vm.aircraftLong.bindBidirectional(this.aircraft.longitude);
+        this.aircraft.latitude.bind(vm.latitude);
+        this.aircraft.longitude.bind(vm.longitude);
+        this.aircraft.heading.bind(vm.heading);
     }
     //buttons func's
     public void connectToFlightgear() {
@@ -121,33 +127,21 @@ public class ViewController implements Initializable, Observer {
             {
                 String ip = ipUserInput.getText(); // saving ip and port data!
                 String port = portUserInput.getText();
-                vm.connectToCalcServerVm(ip, port, ((Map) map).matrix, new Point(3, 3), new Point(0, 0));
+                Point currentPos=aircraft.currentPosition, destPoint=path.destPoint;
+                this.path.setPath(vm.connectToCalcServerVm(ip, port, map.matrix, currentPos,destPoint), currentPos,destPoint);
                 popup.close();
-                showPathOnMap();
                 isConnectedToCalcServer = true;
             });
         }
         else{
-            vm.getPathFromCalcServerVm(new Point(0, 0), new Point(3, 3));
-            showPathOnMap();
+            Point currentPos=aircraft.currentPosition, destPoint=path.destPoint;
+            this.path.setPath(vm.getPathFromCalcServerVm(currentPos, destPoint), currentPos,destPoint);
         }
     }
     public void loadData() {
-        FileChooser fc=new FileChooser();
-        fc.setTitle("Choose CSV file");
-        fc.setInitialDirectory(new File("./csv files"));
-        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("csv", "*.csv"));
-        File chosen= fc.showOpenDialog(null);
-        if(chosen!=null){
-            System.out.println(chosen.getName());
-        }
-        try {
-            Scanner s=new Scanner(new FileReader(chosen)).useDelimiter("\n");
-            this.map.setMapDisplayer(this , s);
-            this.aircraft.setAircraft(this);
-            this.map.mapDrawer();
-            vm.positionUpdateVM();
-        } catch (FileNotFoundException e) {}
+        this.map.loadCSV();
+        this.map.mapDrawer();
+        this.aircraft.setAircraft();
     } //use to load CSV file
 
     //**********************************autopilot func's****************************************//
@@ -232,14 +226,15 @@ public class ViewController implements Initializable, Observer {
     }
 
     //***********************************MAP DISPLAY************************************************//
+    public void setDest(){
+        path.setDestination();
+    }
 
-    public void showPathOnMap(){
-        this.map.convertPathToLine();
-    }//use to invoke mapDisplayer method that draw the solution on the map
     //**********************************************************************************************//
     @Override
     public void update(Observable o, Object arg) {
         this.aircraft.position();
+        //System.out.println("view notified");
     }
 }
 

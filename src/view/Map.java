@@ -6,16 +6,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
 import java.awt.geom.Point2D;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Map extends Canvas {
 
-    StringProperty path;
+    String path;
     ViewController vc;
     double heightDelta;
     double maxHeight, minHeight;
@@ -24,13 +24,28 @@ public class Map extends Canvas {
     Point2D initCoordinate;
     int columns, rows;
 
-    public Map() {
-        this.path=new SimpleStringProperty();
+    public void setPath(String path){
+        this.path=path;
+        convertPathToLine();
     }
-
-    public void setMapDisplayer(ViewController vc,Scanner s){
-        this.vc = vc;
-        path.bind(vc.vm.path);
+    public void loadCSV(){
+        FileChooser fc=new FileChooser();
+        fc.setTitle("Choose CSV file");
+        fc.setInitialDirectory(new File("./csv files"));
+        fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("csv", "*.csv"));
+        File chosen= fc.showOpenDialog(null);
+        if(chosen!=null){
+            System.out.println(chosen.getName());
+        }
+        try {
+            Scanner s=new Scanner(new FileReader(chosen)).useDelimiter("\n");
+            this.setMapDisplay(s);
+        } catch (FileNotFoundException e) {}
+    }
+    public void setVc(ViewController vc){
+        this.vc=vc;
+    }
+    public void setMapDisplay(Scanner s){
         ArrayList<String[]> arr=new ArrayList<>();
         while(s.hasNext()){
             String[] read=s.next().split(",");
@@ -51,12 +66,9 @@ public class Map extends Canvas {
         }
         heightDelta=maxHeight-minHeight;
         System.out.println("csv to matrix completed");
-        //loadAircraftImage();
-        //setAircraftPosition();
     }
-
     public void convertPathToLine() {
-        System.out.println("solution is: "+path.getValueSafe());
+        System.out.println("solution is: "+path);
     }
     public Color getColor(double cellHeight){
         Color c=Color.hsb(100*cellHeight/heightDelta, 1.0, 0.5);

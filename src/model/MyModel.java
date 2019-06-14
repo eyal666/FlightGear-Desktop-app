@@ -1,8 +1,5 @@
 package model;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableValue;
 import model.interpeter.Interpreter;
 import model.interpeter.commands.Command;
 import model.interpeter.commands.ConnectCommand;
@@ -12,17 +9,14 @@ import model.server_side.MyClientHandler;
 import model.server_side.MySerialServer;
 import model.server_side.Server;
 
-import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
-import java.util.Observer;
 
 public class MyModel extends Observable {
 
@@ -44,14 +38,14 @@ public class MyModel extends Observable {
         Command openServer = new OpenDataServerCommand();
         openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")), 0);
         calcServer.start(calcServerPort, new MyClientHandler());
+        getAircraftPosition();
     }
 
-    public String getPath() {
-        return path;
-    }
     public void runScript(String[] lines){
-        aircraftControl.lexer(lines);
-        aircraftControl.parser();
+        new Thread(()->{
+            aircraftControl.lexer(lines);
+            aircraftControl.parser();
+        }).start();
     }
     public void controlElevatorAileron(double elevator, double aileron){
         System.out.println(elevator+" , "+aileron);
@@ -70,13 +64,13 @@ public class MyModel extends Observable {
     public void connectToSim(String ip, String port){
         new ConnectCommand().execute(new ArrayList<String>(Arrays.asList("connect", ip, port)),0);
     }
-    public void connectToCalcServer(String ip, String port, String [][] matrix, String init, String goal){
+    public String connectToCalcServer(String ip, String port, String [][] matrix, String init, String goal){
         ipForCalcServer=ip;
         portForCalcServer=Integer.parseInt(port);
         this.matrix=matrix;
-        getPathFromCalcServer(init, goal);
+        return getPathFromCalcServer(init, goal);
     }
-    public void getPathFromCalcServer (String init, String goal){
+    public String getPathFromCalcServer (String init, String goal){
         try {
             Socket theServer=new Socket(ipForCalcServer, portForCalcServer);
             System.out.println("connected to calc server");
@@ -104,8 +98,22 @@ public class MyModel extends Observable {
             this.path=inFromCalcServer.readLine();
         } catch (IOException e) {}
         System.out.println("\tsolution received");
-        this.setChanged();
-        this.notifyObservers();
+        return path;
     }
-
+    public void getAircraftPosition(){
+        new Thread(()->{
+            while(true) {
+                String[] pos = new String[3];
+                pos[0] = String.valueOf(Interpreter.symbolTable.get("/position/latitude-deg").getValue());
+                pos[1] = String.valueOf(Interpreter.symbolTable.get("/position/longitude-deg").getValue());
+                pos[2] = String.valueOf(Interpreter.symbolTable.get("/instrumentation/heading-indicator/indicated-heading-deg").getValue());
+                //System.out.println("model: "+pos);
+                this.setChanged();
+                this.notifyObservers(pos);
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {}
+            }
+        }).start();
+    }
 }
