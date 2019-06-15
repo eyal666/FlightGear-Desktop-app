@@ -20,9 +20,9 @@ import java.util.Observable;
 
 public class MyModel extends Observable {
 
-    Server calcServer; //server to calc best path
+    //Server calcServer; //server to calc best path
     Interpreter aircraftControl; //incharge of controlling the aircraft by joystick/script
-    int calcServerPort;
+    //int calcServerPort;
     PrintWriter outTocalcServer;
     BufferedReader inFromCalcServer;
     String [][] matrix;
@@ -31,14 +31,14 @@ public class MyModel extends Observable {
     int portForCalcServer;
 
 
-    public MyModel(int calcServerPort) {
-        this.calcServerPort = calcServerPort;
-        calcServer = new MySerialServer();
+    public MyModel() {
+        //this.calcServerPort = calcServerPort;
+        //calcServer = new MySerialServer();
         aircraftControl = new Interpreter("./scripts/simulators_vars.txt");
         Command openServer = new OpenDataServerCommand();
         openServer.execute(new ArrayList<>(Arrays.asList("openDataServer", "5400", "10")), 0);
-        calcServer.start(calcServerPort, new MyClientHandler());
-        getAircraftPosition();
+        //calcServer.start(calcServerPort, new MyClientHandler());
+        //getAircraftPosition();
     }
 
     public void runScript(String[] lines){
@@ -68,6 +68,7 @@ public class MyModel extends Observable {
         ipForCalcServer=ip;
         portForCalcServer=Integer.parseInt(port);
         this.matrix=matrix;
+        getAircraftPosition();
         return getPathFromCalcServer(init, goal);
     }
     public String getPathFromCalcServer (String init, String goal){
@@ -107,7 +108,6 @@ public class MyModel extends Observable {
                 pos[0] = String.valueOf(Interpreter.symbolTable.get("/position/latitude-deg").getValue());
                 pos[1] = String.valueOf(Interpreter.symbolTable.get("/position/longitude-deg").getValue());
                 pos[2] = String.valueOf(Interpreter.symbolTable.get("/instrumentation/heading-indicator/indicated-heading-deg").getValue());
-                //System.out.println("model: "+pos);
                 this.setChanged();
                 this.notifyObservers(pos);
                 try {

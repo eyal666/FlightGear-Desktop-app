@@ -88,7 +88,6 @@ public class ViewController implements Initializable, Observer {
     }
     //buttons func's
     public void connectToFlightgear() {
-        System.out.println("connected");
         Stage popup = new Stage();
         VBox box = new VBox(20);
         Label ipLabel = new Label("IP:");
@@ -106,12 +105,12 @@ public class ViewController implements Initializable, Observer {
             String port = portUserInput.getText();
             vm.connectToSimVM(ip, port);
             popup.close();
+            System.out.println("connected to FlightGear...");
         });
         isConnected=true;
     }
     public void calcPath() {
         if(!isConnectedToCalcServer) {
-            System.out.println("connected");
             Stage popup = new Stage();
             VBox box = new VBox(20);
             Label ipLabel = new Label("IP:");
@@ -123,18 +122,18 @@ public class ViewController implements Initializable, Observer {
             popup.setScene(new Scene(box, 350, 250));
             popup.setTitle("Connect to path calc server");
             popup.show();
-            submit.setOnAction(e ->
-            {
+            submit.setOnAction(e -> {
                 String ip = ipUserInput.getText(); // saving ip and port data!
                 String port = portUserInput.getText();
                 Point currentPos=aircraft.currentPosition, destPoint=path.destPoint;
-                this.path.setPath(vm.connectToCalcServerVm(ip, port, map.matrix, currentPos,destPoint), currentPos,destPoint);
                 popup.close();
+                System.out.println("connected to calc server...");
+                this.path.setPath(vm.connectToCalcServerVm(ip, port, map.matrix, currentPos,destPoint), currentPos,destPoint);
                 isConnectedToCalcServer = true;
             });
         }
         else{
-            Point currentPos=aircraft.currentPosition, destPoint=path.destPoint;
+            Point currentPos=aircraft.currentPosition, destPoint=path.destPoint;//
             this.path.setPath(vm.getPathFromCalcServerVm(currentPos, destPoint), currentPos,destPoint);
         }
     }
@@ -190,7 +189,7 @@ public class ViewController implements Initializable, Observer {
         fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("txt", "*.txt"));
         File chosen= fc.showOpenDialog(null);
         if(chosen!=null){
-            System.out.println(chosen.getName());
+            System.out.println(chosen.getName()+" loaded");
         }
         try {
             Scanner s=new Scanner(new FileReader(chosen)).useDelimiter("\n");
@@ -234,7 +233,6 @@ public class ViewController implements Initializable, Observer {
     @Override
     public void update(Observable o, Object arg) {
         this.aircraft.position();
-        //System.out.println("view notified");
     }
 }
 

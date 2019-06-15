@@ -33,7 +33,7 @@ public class ViewModel extends Observable implements Observer {
         double aileronVal;
         elevatorVal=-joyStickY.doubleValue()/70;//Double.min(0-(joyStickY.doubleValue()/70), 1);
         aileronVal=joyStickX.doubleValue()/70;//Double.min(joyStickX.doubleValue()/70, 1);
-        System.out.println(elevatorVal+" , "+aileronVal);
+        //System.out.println(elevatorVal+" , "+aileronVal);
         m.controlElevatorAileron(elevatorVal, aileronVal);
     }
     public void controlRudderVm(){

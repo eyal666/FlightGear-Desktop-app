@@ -15,14 +15,12 @@
 17. rudder = (h0 - heading)/20
 18. aileron = - roll / 70
 19. elevator = pitch / 50
-20. print airspeed
 21. sleep 100
 22. }
 16. while alt < 1000 {
 17. rudder = (h0 - heading)/100
 18. aileron = - roll / 70
 19. elevator = pitch / 50
-20. print airspeed
 21. sleep 100
 22. }
 23. print "done"

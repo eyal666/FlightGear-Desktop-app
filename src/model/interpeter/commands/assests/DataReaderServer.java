@@ -19,12 +19,13 @@ public class DataReaderServer {
         this.port=port;
         this.rate=rate;
         this.varNames=new ArrayList<>();
-        try {
-            Scanner s=new Scanner(new BufferedReader(new FileReader("./scripts/simulator_vars.txt")));
-            while(s.hasNext()){
-                varNames.add(s.next());
-            }
-        } catch (FileNotFoundException e) {}
+//        try {
+//            Scanner s=new Scanner(new BufferedReader(new FileReader("./scripts/simulator_vars.txt")));
+//            while(s.hasNext()){
+//                varNames.add(s.next());
+//            }
+//        } catch (FileNotFoundException e) {}
+        addVars();
         for(String s : varNames) {
             Interpreter.symbolTable.put(s, new Variable(0.0, s));
         }
@@ -54,5 +55,34 @@ public class DataReaderServer {
     }
     public static void close(){
         stop=true;
+    }
+    public void addVars(){
+        varNames.add("/instrumentation/airspeed-indicator/indicated-speed-kt");
+        varNames.add("/instrumentation/altimeter/indicated-altitude-ft");
+        varNames.add("/instrumentation/altimeter/pressure-alt-ft");
+        varNames.add("/instrumentation/attitude-indicator/indicated-pitch-deg");
+        varNames.add("/instrumentation/attitude-indicator/indicated-roll-deg");
+        varNames.add("/instrumentation/attitude-indicator/internal-pitch-deg");
+        varNames.add("/instrumentation/attitude-indicator/internal-roll-deg");
+        varNames.add("/instrumentation/encoder/indicated-altitude-ft");
+        varNames.add("/instrumentation/encoder/pressure-alt-ft");
+        varNames.add("/instrumentation/gps/indicated-altitude-ft");
+        varNames.add("/instrumentation/gps/indicated-ground-speed-kt");
+        varNames.add("/instrumentation/gps/indicated-vertical-speed");
+        varNames.add("/instrumentation/heading-indicator/indicated-heading-deg");
+        varNames.add("/instrumentation/magnetic-compass/indicated-heading-deg");
+        varNames.add("/instrumentation/slip-skid-ball/indicated-slip-skid");
+        varNames.add("/instrumentation/turn-indicator/indicated-turn-rate");
+        varNames.add("/instrumentation/vertical-speed-indicator/indicated-speed-fpm");
+        varNames.add("/controls/flight/aileron");
+        varNames.add("/controls/flight/elevator");
+        varNames.add("/controls/flight/rudder");
+        varNames.add("/controls/flight/flaps");
+        varNames.add("/controls/engines/current-engine/throttle");
+        varNames.add("/engines/engine/rpm");
+        varNames.add("/controls/flight/speedbrake");
+        varNames.add("/position/latitude-deg");
+        varNames.add("/position/longitude-deg");
+
     }
 }

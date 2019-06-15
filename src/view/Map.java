@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class Map extends Canvas {
 
-    String path;
+    //String path;
     ViewController vc;
     double heightDelta;
     double maxHeight, minHeight;
@@ -25,8 +25,8 @@ public class Map extends Canvas {
     int columns, rows;
 
     public void setPath(String path){
-        this.path=path;
-        convertPathToLine();
+        //this.path=path;
+        //convertPathToLine();
     }
     public void loadCSV(){
         FileChooser fc=new FileChooser();
@@ -65,10 +65,6 @@ public class Map extends Canvas {
             }
         }
         heightDelta=maxHeight-minHeight;
-        System.out.println("csv to matrix completed");
-    }
-    public void convertPathToLine() {
-        System.out.println("solution is: "+path);
     }
     public Color getColor(double cellHeight){
         Color c=Color.hsb(100*cellHeight/heightDelta, 1.0, 0.5);
