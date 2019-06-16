@@ -59,6 +59,9 @@ public class ViewModel extends Observable implements Observer {
         String goalPointAsString = goal.x + "," + goal.y;
         return m.getPathFromCalcServer(initPointAsString, goalPointAsString);
     }
+    public void getAircraftPosition(){
+        m.getAircraftPosition();
+    }
     @Override
     public void update(Observable o, Object arg) {
         latitude.setValue(Double.parseDouble(((String[])arg)[0]));

@@ -31,7 +31,7 @@ public class Map extends Canvas {
     public void loadCSV(){
         FileChooser fc=new FileChooser();
         fc.setTitle("Choose CSV file");
-        fc.setInitialDirectory(new File("./csv files"));
+        //fc.setInitialDirectory(new File("./csv files"));
         fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("csv", "*.csv"));
         File chosen= fc.showOpenDialog(null);
         if(chosen!=null){

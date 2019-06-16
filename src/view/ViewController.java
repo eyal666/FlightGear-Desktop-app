@@ -141,6 +141,7 @@ public class ViewController implements Initializable, Observer {
         this.map.loadCSV();
         this.map.mapDrawer();
         this.aircraft.setAircraft();
+        vm.getAircraftPosition();
     } //use to load CSV file
 
     //**********************************autopilot func's****************************************//
@@ -185,12 +186,9 @@ public class ViewController implements Initializable, Observer {
     public void loadScript() {
         FileChooser fc=new FileChooser();
         fc.setTitle("Choose script");
-        fc.setInitialDirectory(new File("./scripts"));
+        //fc.setInitialDirectory(new File("./scripts"));
         fc.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("txt", "*.txt"));
         File chosen= fc.showOpenDialog(null);
-        if(chosen!=null){
-            System.out.println(chosen.getName()+" loaded");
-        }
         try {
             Scanner s=new Scanner(new FileReader(chosen)).useDelimiter("\n");
             while (s.hasNext()){

@@ -61,8 +61,6 @@ public class Aircraft extends Canvas implements Observer {
             int column = Math.round((float) (mapSize[1] * latNew / getWidth()));
             currentPosition.setLocation(row, column);
         }
-        System.out.println(longNew+" , "+latNew);
-        System.out.println(currentPosition.toString());
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, getWidth(), getHeight());
         gc.drawImage(aircraft, longNew-18, latNew-18, 40, 40);

@@ -48,7 +48,7 @@ public class MyModel extends Observable {
         }).start();
     }
     public void controlElevatorAileron(double elevator, double aileron){
-        System.out.println(elevator+" , "+aileron);
+        //System.out.println(elevator+" , "+aileron);
         DataWriterClient.out.println("set /controls/flight/elevator "+elevator);
         DataWriterClient.out.println("set /controls/flight/aileron "+aileron);
         DataWriterClient.out.flush();
@@ -68,7 +68,6 @@ public class MyModel extends Observable {
         ipForCalcServer=ip;
         portForCalcServer=Integer.parseInt(port);
         this.matrix=matrix;
-        getAircraftPosition();
         return getPathFromCalcServer(init, goal);
     }
     public String getPathFromCalcServer (String init, String goal){
@@ -81,7 +80,7 @@ public class MyModel extends Observable {
         int i, j;
         System.out.println("sending problem...");
         for(i=0;i<matrix.length;i++){
-            System.out.print("\t");
+            //System.out.print("\t");
             for(j=0;j<matrix[i].length-1;j++){
                 outTocalcServer.print(matrix[i][j]+",");
                 //System.out.print(matrix[i][j]+",");
